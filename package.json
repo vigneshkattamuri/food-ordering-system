@@ -1,0 +1,13 @@
+{
+  "name": "plateful-food-ordering-system",
+  "version": "1.0.0",
+  "description": "Full-stack artisanal food ordering system with dual storage engine",
+  "main": "api/index.js",
+  "scripts": {
+    "start": "node api/index.js",
+    "build": "echo 'Ready for Vercel'"
+  },
+  "keywords": ["food-ordering", "spring-boot", "vercel", "restaurant"],
+  "author": "kattamuri vignesh",
+  "license": "MIT"
+}
