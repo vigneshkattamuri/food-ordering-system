@@ -10,7 +10,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document(collection = "orders")
 public class Order {
     public static final List<String> STATUSES =
-            List.of("PLACED", "PREPARING", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED");
+            List.of("PLACED", "ACCEPTED", "PREPARING", "OUT_FOR_DELIVERY", "DELIVERED", "CANCELLED");
 
     @Id
     private String id;

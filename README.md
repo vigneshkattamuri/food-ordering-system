@@ -13,17 +13,26 @@ Plateful is a full-featured, artisanal food delivery web application built with 
 
 ## Quick Start
 
-### Option 1: Double-Click Shortcut (Windows)
-Double-click `run.bat` in the root folder. It automatically detects your installed JDK, uses the Maven wrapper, and launches the server.
+### Option 1: Node.js Instant Local Server (Recommended for Frontend & Fast Dev)
+```bash
+npm start
+```
+Runs the unified full-stack server at 👉 **http://localhost:3000** (serves SPA frontend and all `/api/*` routes with zero external dependencies).
 
-### Option 2: Command Line
+### Option 2: Java Spring Boot 3 Backend
 ```powershell
-# From the food-ordering-system folder:
+# Double click run.bat or run via command line:
+$env:JAVA_HOME = "C:\Program Files\Java\jdk-21"   # If JAVA_HOME is not set
 .\mvnw.cmd spring-boot:run
 ```
+Runs the Spring Boot server at 👉 **http://localhost:8080**.
 
-Once you see `Started FoodOrderApplication`, open:
-👉 **http://localhost:8080**
+### Option 3: Vercel Cloud Deployment
+Deploy to Vercel with zero configuration:
+```bash
+vercel --prod
+```
+Served automatically via `vercel.json` rewrites and `api/index.js` serverless function.
 
 ---
 
@@ -31,43 +40,47 @@ Once you see `Started FoodOrderApplication`, open:
 
 | Role | Email | Password | What You Can Do |
 |---|---|---|---|
-| **Customer** | `sarah@food.com` | `sarah123` | Browse menus, add dishes to cart, apply promo coupons, checkout, track live delivery stepper, cancel orders, view receipts, and reorder. |
-| **Restaurant Owner** | `owner@lantern.com` | `owner123` | Access the Merchant Operations portal, manage kitchen orders, update order status in real time, add dishes, and toggle stock. |
-| **Platform Admin** | `admin@food.com` | `admin123` | View total platform GMV and order metrics, manage all partner kitchens, inspect all customer orders, and add new restaurants. |
+| **Customer** | `sarah@food.com` / `sarah@plateful.com` | `sarah123` | Browse menus, add dishes to cart, use AI Food Assistant, apply promo coupons, redeem Plateful Rewards points, checkout with UPI/Card/COD, live order tracking stepper, review past orders, save favorites. |
+| **Restaurant Owner** | `owner@lantern.com` | `owner123` | Access Merchant Operations, accept & manage kitchen orders (`PLACED` ➔ `ACCEPTED` ➔ `PREPARING` ➔ `OUT_FOR_DELIVERY`), toggle dish availability in real-time, edit menu prices & descriptions, view restaurant analytics. |
+| **Platform Admin** | `admin@food.com` / `admin@plateful.com` | `admin123` | Platform oversight, view total GMV, manage partner kitchens, review all orders, inspect registered platform users and coupon codes. |
 
 ---
 
 ## Key Features
 
-1. **Explore & Discovery**:
-   - Live search by restaurant name, cuisine, address, or dish name.
-   - Category filtering: *Artisanal Pizza*, *Asian & Noodles*, *Indian Curries*, *Smash Burgers*, *Harvest Bowls*.
+1. **Explore & Artisanal Discovery**:
+   - Live search across restaurants, cuisines, and dish names.
+   - Category filtering: *Artisanal Pizza*, *Asian & Noodles*, *Indian Curries*, *Smash Burgers*, *Harvest Bowls*, *Momos*.
    - Sorting by *Highest Rated*, *Fastest Delivery Time*, and *Lowest Delivery Fee*.
-   - Dietary tag filters (e.g., *🌱 Veg Only*).
+   - Dietary tag filters (*🌱 Vegetarian Only*, *🌶️ Spicy*).
+   - Dynamic **Dark Mode** toggle with full color token switching.
 
-2. **Artisanal Menu & Ordering**:
-   - Full restaurant cover banner with rating, delivery estimate, and free delivery thresholds.
-   - Dish cards with high-res photography, descriptions, calorie counts, and dietary indicators (*Veg*, *Spicy*).
-   - In-card quantity steppers `[- 1 +]` synced with cart.
+2. **AI Food Assistant**:
+   - Natural language menu discovery powered by smart semantic filters (e.g. *"spicy noodles under ₹300"*, *"healthy vegan bowls"*, *"dinner for 2 under ₹500"*).
+   - Generates instant dish recommendations with explanations and 1-click cart addition.
 
-3. **Slide-over Cart & Checkout**:
-   - Quantity adjustment, item removal, and multi-restaurant order safety check.
-   - Coupon promo code system (*`WELCOME20`* for 20% off, *`FREESHIP`* for free delivery, *`TASTY10`* for $10 off $30+).
-   - Delivery address, contact phone, and special delivery instructions.
+3. **Plateful Rewards & Loyalty Points**:
+   - Earn points on every order (10 points per ₹100 spent).
+   - Redeem points directly at checkout (1 point = ₹0.50 discount).
+   - View points balance, cash value equivalent, and full transaction history.
+
+4. **Slide-over Cart & Checkout**:
+   - In-card and cart quantity steppers synced in real time.
+   - Promo coupon validation (`WELCOME20`, `FREESHIP`, `TASTY10`, `PLATEFUL50`, `NEWUSER30`).
    - Payment method toggle: 💳 Card, 📱 UPI, 💵 Cash on Delivery (COD).
 
-4. **Live Order Tracking**:
-   - Visual 4-stage stepper: **Order Placed** ➔ **Kitchen Preparing** ➔ **Out for Delivery** ➔ **Delivered**.
+5. **Live Order Tracking Stepper**:
+   - 4-stage visual stepper: **Order Placed** ➔ **Accepted** ➔ **Kitchen Preparing** ➔ **Out for Delivery** ➔ **Delivered**.
    - Interactive simulation button (*⚡ Simulate Next Step*) for live testing and demonstrations.
-   - Customer cancellation (for active orders in *PLACED* or *PREPARING* state).
-   - Itemized digital receipt invoice modal and 1-click *Reorder* button.
+   - Verified customer cancellation (with automatic reward points refund).
+   - Digital itemized receipt modal and 1-click *Reorder* button.
+   - Order star-rating and text review submission.
 
-5. **Merchant & Admin Portals**:
-   - Analytics metric cards: Total Platform GMV, Order Counts, Active Deliveries, Partner Kitchens.
-   - Real-time order status management.
+6. **Merchant & Admin Portals**:
+   - Real-time kitchen order processing with state-machine transition validation.
    - Dish creator with dietary tags, pricing, and category.
    - Real-time stock toggle switch (*In Stock* / *Sold Out*).
-   - Partner kitchen registration.
+   - User directory and platform performance analytics.
 
 ---
 
@@ -77,7 +90,7 @@ Once you see `Started FoodOrderApplication`, open:
 | Method | Path | Access | Description |
 |---|---|---|---|
 | POST | `/api/auth/register` | Public | Register customer or restaurant owner |
-| POST | `/api/auth/login` | Public | Login and receive bearer token |
+| POST | `/api/auth/login` | Public | Login with rate limiting and secure password hash |
 | GET | `/api/auth/me` | Logged In | Get profile of current user |
 | PUT | `/api/auth/profile` | Logged In | Update name, phone, default address |
 | PUT | `/api/auth/change-password` | Logged In | Change user password |
@@ -104,13 +117,21 @@ Once you see `Started FoodOrderApplication`, open:
 | POST | `/api/orders/coupon/validate` | Public | Validate promo coupon code and calculate discount |
 | GET | `/api/orders/my` | Logged In | Get current user's order history |
 | GET | `/api/orders/{id}` | Order Owner / Admin | Get single order details |
-| PUT | `/api/orders/{id}/cancel` | Order Owner / Admin | Cancel order if still in *PLACED* or *PREPARING* |
+| PUT | `/api/orders/{id}/cancel` | Order Owner / Admin | Cancel order if still in *PLACED*, *ACCEPTED*, or *SCHEDULED* |
 | GET | `/api/orders` | Owner / Admin | View incoming orders for merchant/admin |
-| PUT | `/api/orders/{id}/status` | Owner / Admin | Update order status |
+| PUT | `/api/orders/{id}/status` | Owner / Admin | Update order status with valid transition check |
 
-### Platform Metrics
+### AI, Rewards & Reviews
 | Method | Path | Access | Description |
 |---|---|---|---|
+| POST | `/api/ai/recommend` | Public | AI Food Assistant natural language recommendation |
+| GET | `/api/rewards` | Logged In | Get user reward balance and transaction history |
+| POST | `/api/rewards/redeem` | Logged In | Redeem points for order discount |
+| POST | `/api/reviews` | Logged In | Submit order rating and review |
+| GET | `/api/reviews` | Public | Get reviews for a restaurant |
+| GET | `/api/favorites` | Logged In | Get user favorite dishes |
+| POST | `/api/favorites/toggle` | Logged In | Add or remove dish from favorites |
+| GET | `/api/admin/users` | Admin | List all registered platform users |
 | GET | `/api/admin/stats` | Owner / Admin | Total revenue, active orders, and partner counts |
 
 ---
@@ -119,23 +140,28 @@ Once you see `Started FoodOrderApplication`, open:
 
 ```
 food-ordering-system/
-├── run.bat                               # Windows launcher script
-├── mvnw / mvnw.cmd                       # Maven wrapper
-├── pom.xml                               # Spring Boot 3 dependencies
+├── api/
+│   └── index.js                      # Vercel serverless function & standalone local server
+├── public/                           # Production web app assets
+│   ├── index.html                    # Semantic HTML5 layout, modals & dialogs
+│   ├── css/style.css                 # Design system, dark mode tokens & responsive styles
+│   └── js/app.js                     # SPA router, cart, live tracker, AI assistant & portals
+├── run.bat                           # Windows Spring Boot launcher script
+├── mvnw / mvnw.cmd                   # Maven wrapper
+├── pom.xml                           # Spring Boot 3 dependencies
 └── src/
     └── main/
         ├── java/com/foodorder/
-        │   ├── FoodOrderApplication.java # Entrypoint with dual-storage detection
+        │   ├── FoodOrderApplication.java # Spring Boot entrypoint with dual-storage detection
         │   ├── DataSeeder.java           # Demo data seeder
         │   ├── model/                    # User, Restaurant, MenuItem, Order, OrderItem
-        │   ├── repository/               # Repository interfaces (ListCrudRepository)
-        │   │   └── memory/               # In-Memory fallback storage implementations
+        │   ├── repository/               # Repositories & in-memory fallbacks
         │   ├── service/                  # AuthService (BCrypt, tokens, roles)
         │   └── controller/               # Auth, Restaurant, Order, Stats REST APIs
         └── resources/
             ├── application.properties    # Configuration
-            └── static/                   # SPA Frontend
-                ├── index.html            # Semantic HTML5 layout & modals
-                ├── css/style.css         # Modern design system & responsive styles
-                └── js/app.js             # SPA Router, Cart, Live Tracker, & Portals
+            └── static/                   # Static resources synced with public/
+                ├── index.html
+                ├── css/style.css
+                └── js/app.js
 ```
